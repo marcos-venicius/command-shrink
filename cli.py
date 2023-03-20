@@ -71,7 +71,7 @@ class Cli:
         print(f'[+] shrink "{aliasname}" created successfully')
 
 if __name__ == "__main__":
-    filemanager = FileManager(HOME_DIR + "/", FILENAME, APPDIR)
+    filemanager = FileManager(HOME_DIR, FILENAME, APPDIR)
 
     cli = Cli(filemanager)
 
