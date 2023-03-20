@@ -10,6 +10,6 @@ after this you will be able to use "all" command and the ls -la will be executed
 
 == OPTIONS ==
 
--help           show this help message
--list           list all available shrinks
+  -help           show this help message
+  -list           list all available shrinks
 """

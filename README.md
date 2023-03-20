@@ -31,3 +31,8 @@ for example, if you want to make the command `all` to list all files in current 
 and done.
 
 when you execute `all` in your terminal, the command `ls -la` will be executed.
+
+## Options
+
+- `-list` list all available shrinks created
+- `-help` show menu help
