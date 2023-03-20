@@ -7,10 +7,11 @@ from filemanager import FileManager
 from help import HELP_TEXT
 from terminals.bashrc import Bashrc
 
-FILENAME = "settings.cli"
+EXTENSION = '.shrink'
+SHRINKNAME = 'shrink'
+FILENAME = "settings" + EXTENSION
 APPDIR = '.shrink/'
 HOME_DIR = path.expanduser('~')
-SHRINKNAME = 'shrink'
 
 class Cli:
     def __init__(self, filemanager: FileManager, rcfile: Bashrc):
