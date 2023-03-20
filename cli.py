@@ -15,9 +15,15 @@ class Cli:
         self.args = argv[1:]
         self.configs = filemanager
         self.aliases = filemanager.readitems('alias')
+        self.options = {
+            '-list': self.__list_available_shrinks
+        }
 
     def __str__(self):
         return HELP_TEXT
+
+    def __list_available_shrinks(self):
+        print('list all available commands')
 
     def __get_alias_name(self) -> str:
         aliasname = None
@@ -49,8 +55,18 @@ class Cli:
 
         return command
 
+    def __execute_command(self) -> bool:
+        if len(self.args) == 1 and self.args[0] in self.options:
+            self.options[self.args[0]]()
+            return True
+
+        return False
+
     def run(self) -> None:
         self.configs.create_config_file_if_not_exists()
+
+        if self.__execute_command():
+            return
 
         if len(self.args) == 0:
             return print(self)
