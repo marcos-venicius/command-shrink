@@ -5,6 +5,7 @@ from sys import argv
 
 from filemanager import FileManager
 from help import HELP_TEXT
+from terminals.bashrc import Bashrc
 
 FILENAME = "settings.cli"
 APPDIR = '.shrink/'
@@ -12,10 +13,11 @@ HOME_DIR = path.expanduser('~')
 SHRINKNAME = 'shrink'
 
 class Cli:
-    def __init__(self, filemanager: FileManager):
+    def __init__(self, filemanager: FileManager, rcfile: Bashrc):
         self.args = argv[1:]
         self.configs = filemanager
         self.aliases = filemanager.readitems(SHRINKNAME)
+        self.rcfile = rcfile
         self.options = {
             '-list': self.__list_available_shrinks,
             '-help': self.__show_help
@@ -91,12 +93,17 @@ class Cli:
             print(f'[!] a shrink called "{aliasname}" already exists to command "{self.aliases[aliasname]}"')
             exit(1)
 
+        if self.rcfile.aliasexists(aliasname):
+            raise Exception(f'your {self.rcfile} already has an alias called "{aliasname}"')
+
         command = self.__get_command()
 
         print(f'[*] creating shrink called "{aliasname}" to command "{command}"')
 
         try:
             self.configs.writeitem(SHRINKNAME, aliasname, command)
+            self.rcfile.createalias(aliasname, command)
+            self.rcfile.source()
         except Exception as e:
             print(f'[!] cannot write the shrink\n  |\n  |\n  {e}')
             exit(1)
@@ -105,11 +112,12 @@ class Cli:
 
 if __name__ == "__main__":
     filemanager = FileManager(HOME_DIR, FILENAME, APPDIR)
+    bashrc = Bashrc()
 
-    cli = Cli(filemanager)
+    cli = Cli(filemanager, bashrc)
 
     try:
         cli.run()
     except Exception as e:
-        print(e)
+        print(f'[!] {e}')
         exit(1)
