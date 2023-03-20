@@ -13,7 +13,8 @@ HOME_DIR = path.expanduser('~')
 class Cli:
     def __init__(self, filemanager: FileManager):
         self.args = argv[1:]
-        self.manager = filemanager
+        self.configs = filemanager
+        self.aliases = filemanager.readitems('alias')
 
     def __str__(self):
         return HELP_TEXT
@@ -46,13 +47,28 @@ class Cli:
         return command
 
     def run(self) -> None:
+        self.configs.create_config_file_if_not_exists()
+
         if len(self.args) == 0:
             return print(self)
     
         aliasname = self.__get_alias_name()
+
+        if aliasname in self.aliases:
+            print(f'[!] a shrink called "{aliasname}" already exists to command "{self.aliases[aliasname]}"')
+            exit(1)
+
         command = self.__get_command()
 
-        print(f'creating shrink called "{aliasname}" to command "{command}"')
+        print(f'[*] creating shrink called "{aliasname}" to command "{command}"')
+
+        try:
+            self.configs.writeitem('alias', aliasname, command)
+        except Exception as e:
+            print(f'[!] cannot write the shrink\n  |\n  |\n  {e}')
+            exit(1)
+
+        print(f'[+] shrink "{aliasname}" created successfully')
 
 if __name__ == "__main__":
     filemanager = FileManager(HOME_DIR + "/", FILENAME, APPDIR)

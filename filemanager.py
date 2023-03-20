@@ -7,9 +7,7 @@ class FileManager:
         self.foldername = foldername
         self.fullpath = path.join(basepath, foldername, filename)
 
-        self.__create_if_not_exists()
-
-    def __create_if_not_exists(self) -> None:
+    def create_config_file_if_not_exists(self) -> None:
         folderpath = path.join(self.basepath, self.foldername)
 
         folderexists = path.exists(folderpath) and path.isdir(folderpath)
@@ -21,13 +19,45 @@ class FileManager:
         if not fileexits:
             with open(self.fullpath, 'w') as f:
                 f.close()
+    
+    def __extract_key(self, typ: str, line: str) -> str:
+        text = line.replace(f'@{typ} ', '')
 
-    def writeitem(self, typ: str, key: str, value: str):
+        equalIndex = text.index('=')
+
+        return text[:equalIndex].strip()
+
+    def __extract_value(self, line: str) -> str:
+        equalIndex = line.index('=')
+
+        return line[equalIndex + 1:].replace('\n', '')
+
+    def readitems(self, typ: str) -> dict[str, str]:
+        items = {}
+
+        lines = []
+
+        with open(self.fullpath, 'rb') as f:
+            lines = f.readlines()
+            f.close()
+
+        for line in lines:
+            line = line.decode('utf-8')
+            if line.strip().startswith(f'@{typ} '):
+                key = self.__extract_key(typ, line)
+                value = self.__extract_value(line)
+
+                items[key] = value
+
+        return items
+
+    def writeitem(self, typ: str, key: str, value: str) -> None:
         key = key.strip()
         typ = typ.strip()
 
-        item = bytes(f'@{typ} {key}={value}')
+        item = f'@{typ} {key}={value}'.encode('utf-8')
 
-        with open(self.fullpath, 'wb') as f:
-            f.write(item)
+        with open(self.fullpath, 'ab') as f:
+            f.write(bytes(item))
+            f.write(b'\n')
             f.close()
