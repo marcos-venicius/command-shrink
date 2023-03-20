@@ -9,12 +9,13 @@ from help import HELP_TEXT
 FILENAME = "settings.cli"
 APPDIR = '.shrink/'
 HOME_DIR = path.expanduser('~')
+SHRINKNAME = 'shrink'
 
 class Cli:
     def __init__(self, filemanager: FileManager):
         self.args = argv[1:]
         self.configs = filemanager
-        self.aliases = filemanager.readitems('alias')
+        self.aliases = filemanager.readitems(SHRINKNAME)
         self.options = {
             '-list': self.__list_available_shrinks,
             '-help': self.__show_help
@@ -27,7 +28,16 @@ class Cli:
         print(self)
 
     def __list_available_shrinks(self) -> None:
-        print('list all available commands')
+        print('== SHRINKS ==')
+        print()
+
+        for key in self.aliases:
+            value = self.aliases[key]
+            key_show = key.ljust(20, '-').replace(key, f'{key} ')
+
+            print(f'{key_show} {value}')
+
+        print()
 
     def __get_alias_name(self) -> str:
         aliasname = None
@@ -86,7 +96,7 @@ class Cli:
         print(f'[*] creating shrink called "{aliasname}" to command "{command}"')
 
         try:
-            self.configs.writeitem('alias', aliasname, command)
+            self.configs.writeitem(SHRINKNAME, aliasname, command)
         except Exception as e:
             print(f'[!] cannot write the shrink\n  |\n  |\n  {e}')
             exit(1)

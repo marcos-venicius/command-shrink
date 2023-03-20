@@ -1,4 +1,7 @@
 HELP_TEXT = """
+Author:     Marcos Venicius @ https://github.com/marcos-venicius
+Project:    https://github.com/marcos-venicius/command-shrink
+
 == SHRINK CLI PROGRAM ==
         
 example: ./cli.py all @ ls -la
