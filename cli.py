@@ -31,6 +31,9 @@ class Cli:
         if aliasname is None or len(aliasname) == 0:
             raise Exception(f'invalid arguments:\n\n== HELP ==\n {self}')
 
+        if aliasname.startswith('-'):
+            raise Exception(f'you cannot create aliases that starts with "-"')
+
         return aliasname
 
     def __get_command(self) -> str:
