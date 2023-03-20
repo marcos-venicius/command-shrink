@@ -16,13 +16,17 @@ class Cli:
         self.configs = filemanager
         self.aliases = filemanager.readitems('alias')
         self.options = {
-            '-list': self.__list_available_shrinks
+            '-list': self.__list_available_shrinks,
+            '-help': self.__show_help
         }
 
     def __str__(self):
         return HELP_TEXT
 
-    def __list_available_shrinks(self):
+    def __show_help(self) -> None:
+        print(self)
+
+    def __list_available_shrinks(self) -> None:
         print('list all available commands')
 
     def __get_alias_name(self) -> str:
@@ -69,7 +73,7 @@ class Cli:
             return
 
         if len(self.args) == 0:
-            return print(self)
+            return self.__show_help()
     
         aliasname = self.__get_alias_name()
 
