@@ -13,7 +13,7 @@ class Bashrc:
 
     def __check_if_exists(self) -> None:
         if not path.exists(self.fullpath):
-            raise Exception('your terminal should consumes ~/.bashrc file.\nto solve it, make sure you have this file created and your terminal is reading it.')
+            raise Exception('your terminal should consumes ~/{self} file.\nto solve it, make sure you have this file created and your terminal is reading it.')
 
     def aliasexists(self, aliasname: str) -> bool:
         lines = []
