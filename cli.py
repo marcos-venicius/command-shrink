@@ -5,7 +5,7 @@ from sys import argv
 
 from filemanager import FileManager
 from help import HELP_TEXT
-from bashrc import Bashrc
+from terminals.bashrc import Bashrc
 
 FILENAME = "settings.cli"
 APPDIR = '.shrink/'
