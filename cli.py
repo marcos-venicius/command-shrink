@@ -18,13 +18,49 @@ class Cli:
     def __str__(self):
         return HELP_TEXT
 
-    def run(self):
+    def __get_alias_name(self) -> str:
+        aliasname = None
+
+        for idx in range(len(self.args)):
+            if self.args[idx].strip() == '@' and idx > 0:
+                aliasname = self.args[idx - 1]
+
+        aliasname = aliasname.strip()
+
+        if aliasname is None or len(aliasname) == 0:
+            raise Exception(f'invalid arguments:\n\n== HELP ==\n {self}')
+
+        return aliasname
+
+    def __get_command(self) -> str:
+        args = self.args[2:]
+
+        if len(args) == 0:
+            raise Exception(f'invalid arguments:\n\n== HELP ==\n {self}')
+
+        command = ' '.join(args).strip()
+
+        if len(command) == 0:
+            raise Exception(f'invalid arguments:\n\n== HELP ==\n {self}')
+
+        return command
+
+    def run(self) -> None:
         if len(self.args) == 0:
-            print(self)
+            return print(self)
+    
+        aliasname = self.__get_alias_name()
+        command = self.__get_command()
+
+        print(f'creating shrink called "{aliasname}" to command "{command}"')
 
 if __name__ == "__main__":
     filemanager = FileManager(HOME_DIR + "/", FILENAME, APPDIR)
 
     cli = Cli(filemanager)
 
-    cli.run()
+    try:
+        cli.run()
+    except Exception as e:
+        print(e)
+        exit(1)
