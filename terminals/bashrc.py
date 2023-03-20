@@ -1,3 +1,4 @@
+import subprocess
 from os import path
 
 class Bashrc:
@@ -35,6 +36,16 @@ class Bashrc:
 
         return False
 
-    def createalias(self):
-        pass
+    def createalias(self, name: str, command: str) -> None:
+        text = f'alias {name}="{command}"'.encode('utf-8')
 
+        with open(self.fullpath, 'ab') as f:
+            f.write(bytes(text))
+            f.close()
+
+    def source(self) -> None:
+        print()
+        print('PLEASE, SYNC YOUR CONFIGS: ')
+        print()
+        print(f'source {self.fullpath}')
+        print()

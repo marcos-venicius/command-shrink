@@ -56,9 +56,6 @@ class Cli:
         if aliasname.startswith('-'):
             raise Exception(f'you cannot create aliases that starts with "-"')
 
-        if self.rcfile.aliasexists(aliasname):
-            raise Exception(f'your {self.rcfile} already has an alias called "{aliasname}"')
-
         return aliasname
 
     def __get_command(self) -> str:
@@ -96,12 +93,17 @@ class Cli:
             print(f'[!] a shrink called "{aliasname}" already exists to command "{self.aliases[aliasname]}"')
             exit(1)
 
+        if self.rcfile.aliasexists(aliasname):
+            raise Exception(f'your {self.rcfile} already has an alias called "{aliasname}"')
+
         command = self.__get_command()
 
         print(f'[*] creating shrink called "{aliasname}" to command "{command}"')
 
         try:
             self.configs.writeitem(SHRINKNAME, aliasname, command)
+            self.rcfile.createalias(aliasname, command)
+            self.rcfile.source()
         except Exception as e:
             print(f'[!] cannot write the shrink\n  |\n  |\n  {e}')
             exit(1)
