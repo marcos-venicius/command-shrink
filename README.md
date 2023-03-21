@@ -32,14 +32,13 @@ and done.
 
 when you execute `all` in your terminal, the command `ls -la` will be executed.
 
-## Configuring
+## Installing
 
-to configure this cli:
+execute the command bellow to install the cli
 
-- open your `~/.bashrc`
-- add the line `shrink() { ~/path/to/project/folder/cli.py "$@"; exec bash; }` to the bottom of the file
-- execute `source ~/.bashrc`
-- now, you can execute `shrink -help`
+```bash
+cd ~ && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && shrink -help
+```
 
 ## -help
 
@@ -53,11 +52,11 @@ Project:    https://github.com/marcos-venicius/command-shrink
 
   like:
     
-    $ ./cli.py <shrink> @ <command>
+    $ shrink <shrink> @ <command>
 
   example:
 
-    $ ./cli.py all @ ls -la
+    $ shrink all @ ls -la
 
   with this command you will have access to the "all" command on your terminal
   that will execute "ls -la"
