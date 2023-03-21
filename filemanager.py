@@ -7,6 +7,11 @@ class FileManager:
         self.foldername = foldername
         self.fullpath = path.join(basepath, foldername, filename)
 
+        self.__setup()
+
+    def __setup(self):
+        self.create_config_file_if_not_exists()
+
     def create_config_file_if_not_exists(self) -> None:
         folderpath = path.join(self.basepath, self.foldername)
 
@@ -61,3 +66,33 @@ class FileManager:
             f.write(bytes(item))
             f.write(b'\n')
             f.close()
+
+    def removeitem(self, typ: str, key: str) -> None:
+        typ = typ.strip()
+        key = key.strip()
+
+        lines = []
+
+        with open(self.fullpath, 'rb') as f:
+            lines = f.read().splitlines()
+            f.close()
+
+        newlines = []
+
+        typ_enc = bytes(f'@{typ}'.encode('utf-8'))
+
+        for line in lines:
+            if line.strip().startswith(typ_enc):
+                linekey = self.__extract_key(typ, line.decode('utf-8'))
+
+                if linekey == key:
+                    continue
+
+            newlines.append(line.decode('utf-8'))
+
+        text = bytes('\n'.join(newlines).encode('utf-8'))
+
+        with open(self.fullpath, 'wb') as f:
+            f.write(text)
+            f.close()
+

@@ -15,24 +15,52 @@ HOME_DIR = path.expanduser('~')
 
 class Cli:
     def __init__(self, filemanager: FileManager, rcfile: Bashrc):
+        self.programname = argv[0]
         self.args = argv[1:]
         self.configs = filemanager
         self.aliases = filemanager.readitems(SHRINKNAME)
         self.rcfile = rcfile
         self.options = {
-            '-list': self.__list_available_shrinks,
-            '-help': self.__show_help
+            '-list': lambda args = []: self.__list_available_shrinks_command(),
+            '-help': lambda args = []: self.__show_help_command(),
+            '-remove': lambda args = []: self.__remove_shrink_command(args)
         }
 
     def __str__(self):
         return HELP_TEXT
 
-    def __show_help(self) -> None:
-        print(self)
+    def __remove_shrink_command(self, args: list[str] = []) -> None:
+        args = list(set(args))
 
-    def __list_available_shrinks(self) -> None:
+        if len(args) == 0:
+            raise Exception('missing shrink name\n  |\n  use -help to see how to use')
+
+        deleted = 0
+
+        for arg in args:
+            arg = arg.strip()
+
+            if arg in self.aliases:
+                self.configs.removeitem(SHRINKNAME, arg)
+                self.rcfile.deletealias(arg)
+                deleted += 1
+            else:
+                print(f'[!] shrink {arg} does not exists')
+
+        if deleted > 0:
+            print(f'[+] {deleted} shrinks deleted successfully')
+
+            self.rcfile.source()
+
+    def __show_help_command(self) -> None:
+        print(str(self).replace('@programname', self.programname))
+
+    def __list_available_shrinks_command(self) -> None:
         print('== SHRINKS ==')
         print()
+
+        if len(self.aliases.keys()) == 0:
+            print('has no shrinks created')
 
         for key in self.aliases:
             value = self.aliases[key]
@@ -73,8 +101,13 @@ class Cli:
         return command
 
     def __execute_command(self) -> bool:
-        if len(self.args) == 1 and self.args[0] in self.options:
-            self.options[self.args[0]]()
+        if len(self.args) >= 1 and self.args[0] in self.options:
+            args = []
+
+            if len(self.args) > 1:
+                args = self.args[1:]
+
+            self.options[self.args[0]](args=args)
             return True
 
         return False
@@ -86,7 +119,7 @@ class Cli:
             return
 
         if len(self.args) == 0:
-            return self.__show_help()
+            return self.__show_help_command()
     
         aliasname = self.__get_alias_name()
 
@@ -111,14 +144,17 @@ class Cli:
 
         print(f'[+] shrink "{aliasname}" created successfully')
 
-if __name__ == "__main__":
+def main():
     filemanager = FileManager(HOME_DIR, FILENAME, APPDIR)
     bashrc = Bashrc()
 
     cli = Cli(filemanager, bashrc)
 
+    cli.run()
+
+if __name__ == "__main__":
     try:
-        cli.run()
+        main()
     except Exception as e:
         print(f'[!] {e}')
         exit(1)

@@ -3,13 +3,25 @@ Author:     Marcos Venicius @ https://github.com/marcos-venicius
 Project:    https://github.com/marcos-venicius/command-shrink
 
 == SHRINK CLI PROGRAM ==
-        
-example: ./cli.py all @ ls -la
 
-after this you will be able to use "all" command and the ls -la will be executed
+  you can use the "@" to create a new shrink
 
-== OPTIONS ==
+  like:
+    
+    $ @programname <shrink> @ <command>
 
-  -help           show this help message
-  -list           list all available shrinks
+  example:
+
+    $ @programname all @ ls -la
+
+  with this command you will have access to the "all" command on your terminal
+  that will execute "ls -la"
+
+
+  -help             show this help message
+  -list             list all available shrinks
+
+  -remove           remove a shrink
+                    example:
+                        -remove shrink1 shrink2 shrink3
 """
