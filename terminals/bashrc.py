@@ -53,6 +53,7 @@ class Bashrc:
 
         with open(self.fullpath, 'ab') as f:
             f.write(bytes(text))
+            f.write(b'\n')
             f.close()
 
     def deletealias(self, aliasname: str) -> None:
@@ -67,6 +68,8 @@ class Bashrc:
         newlines = []
 
         for line in lines:
+            line = line.decode('utf-8')
+
             if self.__check_if_has_alias_on_line(line, aliasname):
                 continue
 
