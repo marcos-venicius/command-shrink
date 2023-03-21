@@ -18,7 +18,6 @@ Project:    https://github.com/marcos-venicius/command-shrink
   that will execute "ls -la"
 
 
-
   -help             show this help message
   -list             list all available shrinks
 
