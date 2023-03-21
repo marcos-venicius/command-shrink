@@ -20,17 +20,17 @@ class Cli:
         self.aliases = filemanager.readitems(SHRINKNAME)
         self.rcfile = rcfile
         self.options = {
-            '-list': self.__list_available_shrinks,
-            '-help': self.__show_help
+            '-list': lambda _: self.__list_available_shrinks_command(),
+            '-help': lambda _: self.__show_help_command()
         }
 
     def __str__(self):
         return HELP_TEXT
 
-    def __show_help(self) -> None:
+    def __show_help_command(self) -> None:
         print(self)
 
-    def __list_available_shrinks(self) -> None:
+    def __list_available_shrinks_command(self) -> None:
         print('== SHRINKS ==')
         print()
 
@@ -73,8 +73,13 @@ class Cli:
         return command
 
     def __execute_command(self) -> bool:
-        if len(self.args) == 1 and self.args[0] in self.options:
-            self.options[self.args[0]]()
+        if len(self.args) >= 1 and self.args[0] in self.options:
+            args = []
+
+            if len(self.args) > 1:
+                args = self.args[1:]
+
+            self.options[self.args[0]](args=args)
             return True
 
         return False
@@ -111,14 +116,17 @@ class Cli:
 
         print(f'[+] shrink "{aliasname}" created successfully')
 
-if __name__ == "__main__":
+def main():
     filemanager = FileManager(HOME_DIR, FILENAME, APPDIR)
     bashrc = Bashrc()
 
     cli = Cli(filemanager, bashrc)
 
+    cli.run()
+
+if __name__ == "__main__":
     try:
-        cli.run()
+        main()
     except Exception as e:
         print(f'[!] {e}')
         exit(1)
