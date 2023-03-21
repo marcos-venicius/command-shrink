@@ -15,7 +15,7 @@ HOME_DIR = path.expanduser('~')
 
 class Cli:
     def __init__(self, filemanager: FileManager, rcfile: Bashrc):
-        self.programname = argv[0]
+        self.programname = 'shrink'
         self.args = argv[1:]
         self.configs = filemanager
         self.aliases = filemanager.readitems(SHRINKNAME)

@@ -52,6 +52,7 @@ class Bashrc:
         text = f'alias {name}="{command}"'.encode('utf-8')
 
         with open(self.fullpath, 'ab') as f:
+            f.write(b'\n')
             f.write(bytes(text))
             f.write(b'\n')
             f.close()
@@ -85,8 +86,5 @@ class Bashrc:
             f.close()
 
     def source(self) -> None:
-        print()
-        print('PLEASE, SYNC YOUR CONFIGS: ')
-        print()
-        print(f'source {self.fullpath}')
-        print()
+        print(f"if your terminal not recognize the command execute: source ~/{self}")
+

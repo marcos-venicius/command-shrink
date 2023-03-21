@@ -32,6 +32,15 @@ and done.
 
 when you execute `all` in your terminal, the command `ls -la` will be executed.
 
+## Configuring
+
+to configure this cli:
+
+- open your `~/.bashrc`
+- add the line `shrink() { ~/path/to/project/folder/cli.py "$@"; exec bash; }` to the bottom of the file
+- execute `source ~/.bashrc`
+- now, you can execute `shrink -help`
+
 ## -help
 
 ```console
