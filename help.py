@@ -3,12 +3,21 @@ Author:     Marcos Venicius @ https://github.com/marcos-venicius
 Project:    https://github.com/marcos-venicius/command-shrink
 
 == SHRINK CLI PROGRAM ==
-        
-example: @programname all @ ls -la
 
-after this you will be able to use "all" command and the ls -la will be executed
+  you can use the "@" to create a new shrink
 
-== OPTIONS ==
+  like:
+    
+    $ @programname <shrink> @ <command>
+
+  example:
+
+    $ @programname all @ ls -la
+
+  with this command you will have access to the "all" command on your terminal
+  that will execute "ls -la"
+
+
 
   -help             show this help message
   -list             list all available shrinks
