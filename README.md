@@ -32,6 +32,33 @@ and done.
 
 when you execute `all` in your terminal, the command `ls -la` will be executed.
 
+## What is the benefits?
+
+All right. you could be thinking: "Just use the bash alias".
+
+But, is not too simple.
+
+if you are working on a project and needs to execute a large command to up a docker container for example.
+
+how anoying is to open the bash, create an alias manually, go back to the terminal, source the current session.
+if the command is wrong? do it again!
+want to remove? do it again!
+want to update? do it again!
+
+with the cli you will be able to do this operations by a single command.
+
+**But, I want to save my aliases.**
+
+Ok, you **can**!
+
+just save the file `~/.shrink/settings.shrink`.
+
+if you access another computer, just paste the content of this file on your machine and execute `shrink -sync`.
+
+and, that is it! all done!
+
+**The `-sync` option is not ready yet**
+
 ## Installing
 
 execute the command bellow to install the cli
