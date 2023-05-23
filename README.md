@@ -68,7 +68,7 @@ cd ~ && echo "SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink 
 execute the command bellow to install the cli
 
 ```bash
-cd ~ && echo "SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.zshrc && cd ~ && shrink -help
+cd ~ && echo "SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && shrink -help
 ```
 
 ## -help
