@@ -60,7 +60,7 @@ and, that is it! all done!
 execute the command bellow to install the cli
 
 ```bash
-cd ~ && echo "SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && shrink -help
+cd ~ && echo "export SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && SHRINK_TERMINAL=bash shrink -help
 ```
 
 ## Installing on zsh
@@ -68,7 +68,7 @@ cd ~ && echo "SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink 
 execute the command bellow to install the cli
 
 ```bash
-cd ~ && echo "SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && shrink -help
+cd ~ && echo "export SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && SHRINK_TERMINAL=zsh shrink -help
 ```
 
 ## -help
