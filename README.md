@@ -4,17 +4,13 @@ many times we have to use large commands.
 
 This is ok, but when this usage is often, it could be anoying.
 
-
 To solve this problem i'm writing this cli.
-
 
 ## How it works
 
 basically you can create a "shrink command" to any command that you have on linux
 
-
 how can i create a new shrink?
-
 
 ```bash
 ./cli.py <shrink_name> @ <command>
@@ -59,12 +55,20 @@ and, that is it! all done!
 
 **The `-sync` option is not ready yet**
 
-## Installing
+## Installing on bash
 
 execute the command bellow to install the cli
 
 ```bash
-cd ~ && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && shrink -help
+cd ~ && echo "SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && shrink -help
+```
+
+## Installing on zsh
+
+execute the command bellow to install the cli
+
+```bash
+cd ~ && echo "SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.zshrc && cd ~ && shrink -help
 ```
 
 ## -help
@@ -78,7 +82,7 @@ Project:    https://github.com/marcos-venicius/command-shrink
   you can use the "@" to create a new shrink
 
   like:
-    
+
     $ shrink <shrink> @ <command>
 
   example:
