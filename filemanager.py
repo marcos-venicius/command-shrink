@@ -1,7 +1,8 @@
 from os import path, mkdir
 
 class FileManager:
-    def __init__(self, basepath: str, filename: str, foldername: str):
+    def __init__(self, basepath: str, filename: str, foldername: str, basekey: str = None):
+        self.basekey = basekey
         self.basepath = basepath
         self.filename = filename
         self.foldername = foldername
@@ -11,6 +12,12 @@ class FileManager:
 
     def __setup(self):
         self.create_config_file_if_not_exists()
+
+    def __key(self, key: str):
+        if self.basekey is not None:
+            return f"{self.basekey}__{key}"
+
+        return key
 
     def create_config_file_if_not_exists(self) -> None:
         folderpath = path.join(self.basepath, self.foldername)
@@ -50,14 +57,18 @@ class FileManager:
             line = line.decode('utf-8')
             if line.strip().startswith(f'@{typ} '):
                 key = self.__extract_key(typ, line)
+                
+                if self.basekey is not None and not str(key).startswith(f"{self.basekey}__"):
+                    continue
+
                 value = self.__extract_value(line)
 
-                items[key] = value
+                items[key.replace(f"{self.basekey}__", "")] = value
 
         return items
 
     def writeitem(self, typ: str, key: str, value: str) -> None:
-        key = key.strip()
+        key = self.__key(key.strip())
         typ = typ.strip()
 
         item = f'@{typ} {key}={value}'.encode('utf-8')
@@ -69,7 +80,7 @@ class FileManager:
 
     def removeitem(self, typ: str, key: str) -> None:
         typ = typ.strip()
-        key = key.strip()
+        key = self.__key(key.strip())
 
         lines = []
 

@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
-from os import path
+from os import path,environ
 from sys import argv
 
 from filemanager import FileManager
 from help import HELP_TEXT
+
 from terminals.bashrc import Bashrc
+from terminals.zshrc import Zshrc
+from terminals.terminal import Terminal
 
 EXTENSION = '.shrink'
 SHRINKNAME = 'shrink'
@@ -14,7 +17,7 @@ APPDIR = '.shrink/'
 HOME_DIR = path.expanduser('~')
 
 class Cli:
-    def __init__(self, filemanager: FileManager, rcfile: Bashrc):
+    def __init__(self, filemanager: FileManager, rcfile: Terminal):
         self.programname = 'shrink'
         self.args = argv[1:]
         self.configs = filemanager
@@ -145,12 +148,23 @@ class Cli:
         print(f'[+] shrink "{aliasname}" created successfully')
 
 def main():
-    filemanager = FileManager(HOME_DIR, FILENAME, APPDIR)
-    bashrc = Bashrc()
+    terminal = environ.get("SHRINK_TERMINAL")
 
-    cli = Cli(filemanager, bashrc)
+    terminals = {
+        'bash': Bashrc,
+        'zsh': Zshrc
+    }
 
-    cli.run()
+    if terminal in terminals:
+        filemanager = FileManager(HOME_DIR, FILENAME, APPDIR, terminal)
+
+        rcfile = terminals[terminal]()
+
+        cli = Cli(filemanager, rcfile)
+
+        cli.run()
+    else:
+        raise Exception("we don't have support to this terminal")
 
 if __name__ == "__main__":
     try:
