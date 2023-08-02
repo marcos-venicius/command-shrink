@@ -13,7 +13,7 @@ basically you can create a "shrink command" to any command that you have on linu
 how can i create a new shrink?
 
 ```bash
-./cli.py <shrink_name> @ <command>
+shrink <shrink_name> @ <command>
 ```
 
 this is the basic syntax.
@@ -21,7 +21,7 @@ this is the basic syntax.
 for example, if you want to make the command `all` to list all files in current directory instead of `ls -la`, you could:
 
 ```bash
-./cli.py all @ ls -la
+shrink all @ ls -la
 ```
 
 and done.
@@ -47,7 +47,7 @@ with the cli you will be able to do this operations by a single command.
 
 Ok, you **can**!
 
-just save the file `~/.shrink/settings.shrink`.
+just save the file `~/.shrink/settings.json`.
 
 if you access another computer, just paste the content of this file on your machine and execute `shrink -sync`.
 
