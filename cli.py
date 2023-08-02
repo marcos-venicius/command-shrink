@@ -4,25 +4,25 @@ from os import path,environ
 from sys import argv
 
 from filemanager import FileManager
+from aliasmanager import AliasManager
 from help import HELP_TEXT
 
 from terminals.bashrc import Bashrc
 from terminals.zshrc import Zshrc
 from terminals.terminal import Terminal
 
-EXTENSION = '.shrink'
+EXTENSION = '.json'
 SHRINKNAME = 'shrink'
 FILENAME = "settings" + EXTENSION
 APPDIR = '.shrink/'
 HOME_DIR = path.expanduser('~')
 
 class Cli:
-    def __init__(self, filemanager: FileManager, rcfile: Terminal):
+    def __init__(self, aliasmanager: AliasManager, terminal: Terminal):
         self.programname = 'shrink'
         self.args = argv[1:]
-        self.configs = filemanager
-        self.aliases = filemanager.readitems(SHRINKNAME)
-        self.rcfile = rcfile
+        self.aliasmanager = aliasmanager
+        self.terminal = terminal
         self.options = {
             '-list': lambda args = []: self.__list_available_shrinks_command(),
             '-help': lambda args = []: self.__show_help_command(),
@@ -43,9 +43,9 @@ class Cli:
         for arg in args:
             arg = arg.strip()
 
-            if arg in self.aliases:
-                self.configs.removeitem(SHRINKNAME, arg)
-                self.rcfile.deletealias(arg)
+            if self.aliasmanager.has(arg):
+                self.aliasmanager.delete(arg)
+                self.terminal.deletealias(arg)
                 deleted += 1
             else:
                 print(f'[!] shrink {arg} does not exists')
@@ -53,7 +53,7 @@ class Cli:
         if deleted > 0:
             print(f'[+] {deleted} shrinks deleted successfully')
 
-            self.rcfile.source()
+            self.terminal.source()
 
     def __show_help_command(self) -> None:
         print(str(self).replace('@programname', self.programname))
@@ -62,27 +62,19 @@ class Cli:
         print('== SHRINKS ==')
         print()
 
-        if len(self.aliases.keys()) == 0:
+        if self.aliasmanager.is_empty():
             print('has no shrinks created')
 
-        for key in self.aliases:
-            value = self.aliases[key]
-            key_show = key.ljust(20, '-').replace(key, f'{key} ')
-
-            print(f'{key_show} {value}')
-
-        print()
+        self.aliasmanager.display()
 
     def __get_alias_name(self) -> str:
         aliasname = None
 
         for idx in range(len(self.args)):
             if self.args[idx].strip() == '@' and idx > 0:
-                aliasname = self.args[idx - 1]
+                aliasname = self.args[idx - 1].strip()
 
-        aliasname = aliasname.strip()
-
-        if aliasname is None or len(aliasname) == 0:
+        if aliasname is None or aliasname == '':
             raise Exception(f'invalid arguments:\n\n== HELP ==\n {self}')
 
         if aliasname.startswith('-'):
@@ -116,31 +108,29 @@ class Cli:
         return False
 
     def run(self) -> None:
-        self.configs.create_config_file_if_not_exists()
-
         if self.__execute_command():
             return
 
         if len(self.args) == 0:
             return self.__show_help_command()
-    
+
         aliasname = self.__get_alias_name()
 
-        if aliasname in self.aliases:
-            print(f'[!] a shrink called "{aliasname}" already exists to command "{self.aliases[aliasname]}"')
+        if self.aliasmanager.has(aliasname):
+            print(f'[!] a shrink called "{aliasname}" already exists to command "{self.aliasmanager.get(aliasname)}"')
             exit(1)
 
-        if self.rcfile.aliasexists(aliasname):
-            raise Exception(f'your {self.rcfile} already has an alias called "{aliasname}"')
+        if self.aliasmanager.has(aliasname):
+            raise Exception(f'your {self.terminal} already has an alias called "{aliasname}"')
 
         command = self.__get_command()
 
         print(f'[*] creating shrink called "{aliasname}" to command "{command}"')
 
         try:
-            self.configs.writeitem(SHRINKNAME, aliasname, command)
-            self.rcfile.createalias(aliasname, command)
-            self.rcfile.source()
+            self.aliasmanager.create(aliasname, command)
+            self.terminal.createalias(aliasname, command)
+            self.terminal.source()
         except Exception as e:
             print(f'[!] cannot write the shrink\n  |\n  |\n  {e}')
             exit(1)
@@ -156,11 +146,12 @@ def main():
     }
 
     if terminal in terminals:
-        filemanager = FileManager(HOME_DIR, FILENAME, APPDIR, terminal)
-
         rcfile = terminals[terminal]()
 
-        cli = Cli(filemanager, rcfile)
+        filemanager = FileManager(str(terminal))
+        aliasmanager = AliasManager(filemanager)
+
+        cli = Cli(aliasmanager, rcfile)
 
         cli.run()
     else:

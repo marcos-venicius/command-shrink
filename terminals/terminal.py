@@ -6,30 +6,9 @@ class Terminal:
         self.filename = filename
         self.fullpath = path.join(self.userpath, self.filename)
 
-        self.__check_if_exists()
+        self.__check_if_terminal_config_file_exists()
 
-    def __str__(self):
-        return self.filename
-
-    def __check_if_exists(self) -> None:
-        if not path.exists(self.fullpath):
-            raise Exception(f'your terminal should consumes ~/{self} file.\nto solve it, make sure you have this file created and your terminal is reading it.')
-
-    def __check_if_has_alias_on_line(self, line: str, aliasname: str) -> bool:
-        line = line.strip()
-
-        return (
-            line
-                .startswith('alias ') and
-            line
-                .replace('alias ', '')
-                .strip()
-                .replace(aliasname, '')
-                .strip()
-                .startswith('=')
-        )
-
-    def aliasexists(self, aliasname: str) -> bool:
+    def check_if_alias_exists(self, aliasname: str) -> bool:
         lines = []
 
         with open(self.fullpath, 'rb') as f:
@@ -37,8 +16,7 @@ class Terminal:
             f.close()
 
         for line in lines:
-            line = line.decode('utf-8')
-            line = line.strip()
+            line = line.decode('utf-8').strip()
 
             if line.startswith('alias'):
                 line = line.replace('alias ', '')
@@ -72,7 +50,7 @@ class Terminal:
         for line in lines:
             line = line.decode('utf-8')
 
-            if self.__check_if_has_alias_on_line(line, aliasname):
+            if self.__check_if_line_is_alias(line, aliasname):
                 continue
 
             # TODO: check if have more than one command on line
@@ -85,3 +63,24 @@ class Terminal:
         with open(self.fullpath, 'wb') as f:
             f.write(text)
             f.close()
+
+    def __str__(self):
+        return self.filename
+
+    def __check_if_terminal_config_file_exists(self) -> None:
+        if not path.exists(self.fullpath):
+            raise Exception(f'your terminal should consumes ~/{self} file.\nto solve it, make sure you have this file created and your terminal is reading it.')
+
+    def __check_if_line_is_alias(self, line: str, aliasname: str) -> bool:
+        line = line.strip()
+
+        return (
+            line
+                .startswith('alias ') and
+            line
+                .replace('alias ', '')
+                .strip()
+                .replace(aliasname, '')
+                .strip()
+                .startswith('=')
+        )
