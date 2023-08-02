@@ -11,12 +11,6 @@ from terminals.bashrc import Bashrc
 from terminals.zshrc import Zshrc
 from terminals.terminal import Terminal
 
-EXTENSION = '.json'
-SHRINKNAME = 'shrink'
-FILENAME = "settings" + EXTENSION
-APPDIR = '.shrink/'
-HOME_DIR = path.expanduser('~')
-
 class Cli:
     def __init__(self, aliasmanager: AliasManager, terminal: Terminal):
         self.programname = 'shrink'
