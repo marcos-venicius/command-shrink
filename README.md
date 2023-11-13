@@ -48,13 +48,13 @@ with the cli you will be able to do this operations by a single command.
 Bash:
 
 ```bash
-cd ~ && echo "export SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git sk && echo 'sk() { ~/.shrink/sk/main.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && SHRINK_TERMINAL=bash sk
+cd ~ && echo "export SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git sk && echo 'sk() { ~/.shrink/sk/main.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && exec bash && SHRINK_TERMINAL=bash sk
 ```
 
 Zsh:
 
 ```bash
-cd ~ && echo "export SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git sk && echo 'sk() { ~/.shrink/sk/main.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && SHRINK_TERMINAL=zsh sk
+cd ~ && echo "export SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git sk && echo 'sk() { ~/.shrink/sk/main.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && exec zsh && SHRINK_TERMINAL=zsh sk
 ```
 
 # Help
