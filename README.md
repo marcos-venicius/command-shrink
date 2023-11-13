@@ -1,5 +1,7 @@
 # Command Shrink
 
+![shrink-cli-example](https://github.com/marcos-venicius/command-shrink/assets/94018427/045f3b83-fcb3-4444-b35b-9189893f0b61)
+
 many times we have to use large commands.
 
 This is ok, but when this usage is often, it could be anoying.
