@@ -1,4 +1,4 @@
-## Command Shrink
+# Command Shrink
 
 many times we have to use large commands.
 
@@ -13,7 +13,7 @@ basically you can create a "shrink command" to any command that you have on linu
 how can i create a new shrink?
 
 ```bash
-shrink <shrink_name> @ <command>
+shrink -a <shrink_name> <command>
 ```
 
 this is the basic syntax.
@@ -21,18 +21,18 @@ this is the basic syntax.
 for example, if you want to make the command `all` to list all files in current directory instead of `ls -la`, you could:
 
 ```bash
-shrink all @ ls -la
+shrink -a all "ls -la"
 ```
 
 and done.
 
 when you execute `all` in your terminal, the command `ls -la` will be executed.
 
-## What is the benefits?
+## Benefits
 
 All right. you could be thinking: "Just use the bash alias".
 
-But, is not too simple.
+But, is not that simple.
 
 if you are working on a project and needs to execute a large command to up a docker container for example.
 
@@ -43,60 +43,36 @@ want to update? do it again!
 
 with the cli you will be able to do this operations by a single command.
 
-**But, I want to save my aliases.**
+## Installing
 
-Ok, you **can**!
-
-just save the file `~/.shrink/settings.json`.
-
-if you access another computer, just paste the content of this file on your machine and execute `shrink -sync`.
-
-and, that is it! all done!
-
-**The `-sync` option is not ready yet**
-
-## Installing on bash
-
-execute the command bellow to install the cli
+Bash:
 
 ```bash
-cd ~ && echo "export SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && SHRINK_TERMINAL=bash shrink -help
+cd ~ && echo "export SHRINK_TERMINAL=bash" >> ~/.bashrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git sk && echo 'sk() { ~/.shrink/sk/main.py "$@"; exec bash; }' >> ~/.bashrc && cd ~ && SHRINK_TERMINAL=bash sk
 ```
 
-## Installing on zsh
-
-execute the command bellow to install the cli
+Zsh:
 
 ```bash
-cd ~ && echo "export SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git shrink && echo 'shrink() { ~/.shrink/shrink/cli.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && SHRINK_TERMINAL=zsh shrink -help
+cd ~ && echo "export SHRINK_TERMINAL=zsh" >> ~/.zshrc && mkdir .shrink && cd .shrink && git clone https://github.com/marcos-venicius/command-shrink.git sk && echo 'sk() { ~/.shrink/sk/main.py "$@"; exec zsh; }' >> ~/.zshrc && cd ~ && SHRINK_TERMINAL=zsh sk
 ```
 
-## -help
+# Help
 
 ```console
-Author:     Marcos Venicius @ https://github.com/marcos-venicius
-Project:    https://github.com/marcos-venicius/command-shrink
+usage: Shrink [-h] [--add] [--list] [--remove] [alias] [command]
 
-== SHRINK CLI PROGRAM ==
+Shrink your large commands
 
-  you can use the "@" to create a new shrink
+positional arguments:
+  alias         Alias name (numbers, letters, underlines)
+  command       Command to shrink
 
-  like:
+options:
+  -h, --help    show this help message and exit
+  --add, -a     Add a new alias
+  --list, -l    List all aliases
+  --remove, -r  Remove an alias
 
-    $ shrink <shrink> @ <command>
-
-  example:
-
-    $ shrink all @ ls -la
-
-  with this command you will have access to the "all" command on your terminal
-  that will execute "ls -la"
-
-
-  -help             show this help message
-  -list             list all available shrinks
-
-  -remove           remove a shrink
-                    example:
-                        -remove shrink1 shrink2 shrink3
+sk cm 'git commit -m'
 ```
